@@ -40,27 +40,18 @@ app.post('/webhook/', function (req, res) {
 	event = req.body.entry[0].messaging[i]
 	sender = event.sender.id
 	if (event.message && event.message.text) {
-	    text = event.message.text
-	    if (text === 'Generic') {
-		sendGenericMessage(sender)
-		continue
-	    }
-	    // sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200))
-
-
-	    let apiai = apiaiApp.textRequest(text, {
-	    	sessionId: 'tabby_cat' // use any arbitrary id
-	    });
-	    apiai.on('response', (response) => {
-	    	// Got a response from api.ai. Let's POST to Facebook Messenger
-	    	text = response.result.fulfillment.speech;
-	    });
-	    sendTextMessage(sender, text);
-	}
-	if (event.postback) {
-	    text = JSON.stringify(event.postback)
-	    sendTextMessage(sender, "Postback received: "+text.substring(0, 200), token)
-	    continue
+	    sendToAi(event);
+	    //     text = event.message.text
+	    //     if (text === 'Generic') {
+	    // 	sendGenericMessage(sender)
+	    // 	continue
+	    //     }
+	    //     sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200))
+	    // }
+	    // if (event.postback) {
+	    //     text = JSON.stringify(event.postback)
+	    //     sendTextMessage(sender, "Postback received: "+text.substring(0, 200), token)
+	    //     continue
 	}
     }
     res.sendStatus(200)
@@ -136,4 +127,28 @@ function sendGenericMessage(sender) {
 	    console.log('Error: ', response.body.error)
 	}
     })
+}
+
+function sendToAi(event) {
+    let sender = event.sender.id;
+    let text = event.message.text;
+
+    let apiai = apiaiApp.textRequest(text, {
+	sessionId: 'tabby_cat' // use any arbitrary id
+
+    });
+
+    apiai.on('response', (response) => {
+	// Got a response from api.ai. Let's POST to Facebook Messenger
+	let aiText = response.result.fulfillment.speech;
+	sendTextMessage(sender, aiText);
+    });
+
+    apiai.on('error', (error) => {
+	console.log(error);
+
+    });
+
+    apiai.end();
+
 }
