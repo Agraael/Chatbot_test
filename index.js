@@ -53,7 +53,7 @@ app.post('/webhook/', function (req, res) {
     res.sendStatus(200)
 })
 
-var token = "EAAbaupnhaZCwBAIgobay0MpBHY69qZAlmxd5JsFbCHQmX6gBHQKgX40287ov6stg6E0vLln7WsiZC3wlPHwZCYJgZCTtOcHCNaHLMQTQmhpOcpaMXQLSTZAZCOeUykWJaIqtfLIXtbt0phVoFel2T4Tj8i4lhdLliJQWWYHkNxEzwZDZD"
+var heroku_token = "EAAbaupnhaZCwBAIgobay0MpBHY69qZAlmxd5JsFbCHQmX6gBHQKgX40287ov6stg6E0vLln7WsiZC3wlPHwZCYJgZCTtOcHCNaHLMQTQmhpOcpaMXQLSTZAZCOeUykWJaIqtfLIXtbt0phVoFel2T4Tj8i4lhdLliJQWWYHkNxEzwZDZD"
 
 function sendTextMessage(sender, text) {
     messageData = {
@@ -61,7 +61,7 @@ function sendTextMessage(sender, text) {
     }
     request({
 	url: 'https://graph.facebook.com/v2.6/me/messages',
-	qs: {access_token:token},
+	qs: {access_token:heroku_token},
 	method: 'POST',
 	json: {
 	    recipient: {id:sender},
@@ -110,7 +110,7 @@ function sendGenericMessage(sender) {
     }
     request({
 	url: 'https://graph.facebook.com/v2.6/me/messages',
-	qs: {access_token:token},
+	qs: {access_token:heroku_token},
 	method: 'POST',
 	json: {
 	    recipient: {id:sender},
