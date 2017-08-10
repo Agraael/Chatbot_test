@@ -45,17 +45,17 @@ app.post('/webhook/', function (req, res) {
 		sendGenericMessage(sender)
 		continue
 	    }
-	    sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200))
+	    // sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200))
 
 
-	    // let apiai = apiaiApp.textRequest(text, {
-	    // 	sessionId: 'tabby_cat' // use any arbitrary id
-	    // });
-	    // apiai.on('response', (response) => {
-	    // 	// Got a response from api.ai. Let's POST to Facebook Messenger
-	    // 	let aiText = response.result.fulfillment.speech;
-	    // 	sendTextMessage(sender, aiText);
-	    // });
+	    let apiai = apiaiApp.textRequest(text, {
+	    	sessionId: 'tabby_cat' // use any arbitrary id
+	    });
+	    apiai.on('response', (response) => {
+	    	// Got a response from api.ai. Let's POST to Facebook Messenger
+	    	text = response.result.fulfillment.speech;
+	    });
+	    sendTextMessage(sender, text);
 	}
 	if (event.postback) {
 	    text = JSON.stringify(event.postback)
