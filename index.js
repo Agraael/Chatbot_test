@@ -2,6 +2,9 @@ var express = require('express')
 var bodyParser = require('body-parser')
 var request = require('request')
 var app = express()
+const apiaiApp = require('apiai')("e6cf31a0e6a3440c81b4e7bda0d67442");
+
+
 
 app.set('port', (process.env.PORT || 5000))
 
@@ -42,7 +45,17 @@ app.post('/webhook/', function (req, res) {
 		sendGenericMessage(sender)
 		continue
 	    }
-	    sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200))
+	    // sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200))
+
+
+	    let apiai = apiaiApp.textRequest(text, {
+		sessionId: 'tabby_cat' // use any arbitrary id
+	    });
+	    apiai.on('response', (response) => {
+		// Got a response from api.ai. Let's POST to Facebook Messenger
+		let aiText = response.result.fulfillment.speech;
+		sendTextMessage(sender, aiText);
+	    });
 	}
 	if (event.postback) {
 	    text = JSON.stringify(event.postback)
