@@ -5,14 +5,14 @@
 // Login   <cedric.cescutti@epitech.eu>
 // 
 // Started on  Sat Aug 12 11:27:42 2017 Kraken
-// Last update Tue Aug 22 21:41:26 2017 Kraken
+// Last update Wed Aug 23 01:54:34 2017 Kraken
 //
 
 var express = require('express');
 var bodyParser = require('body-parser');
 var request = require('request');
 
-var apiAi_token = "e6cf31a0e6a3440c81b4e7bda0d67442";
+var apiAi_token = "30dbfe4cfa4242e69f52ce4efacdf6f6";
 var facebook_token = 'this_is_my_token';
 var heroku_token = "EAAbaupnhaZCwBAIgobay0MpBHY69qZAlmxd5JsFbCHQmX6gBHQKgX40287ov6stg6E0vLln7WsiZC3wlPHwZCYJgZCTtOcHCNaHLMQTQmhpOcpaMXQLSTZAZCOeUykWJaIqtfLIXtbt0phVoFel2T4Tj8i4lhdLliJQWWYHkNxEzwZDZD";
 
@@ -109,12 +109,28 @@ function getName(event) {
 			console.log("error getting username");
 		} else {
 			var bodyObj = JSON.parse(body);
-			console.log(bodyObj);
 			firstName = bodyObj.first_name;
 			lastName = bodyObj.last_name;
 			sendTextMessage(sender_id, "Bonjour," + firstName + " " + lastName + ", je suis un bot créé par Jules et je vais vous trouver l\'ordinateur idéal.");
+			sendTextMessage(sender_id, "Quelle en sera votre utilisation ? (bureautique, gaming, surf internet ...)");
 		}
 	});
+}
+
+function findPc(response, event) {
+	let pcType = '';
+	let pcPrice = 'mid_price';
+	if (response.result.action === 'gaming_pc')
+		pcType = 'gaming';
+	if (response.result.action === 'internet_pc')
+		pcType = 'internet';
+	if (response.result.action === 'office_pc')
+		pcType = 'office';
+	if (response.result.parameters.low_price != '')
+		pcPrice = 'low_price';
+	if (response.result.parameters.big_price != '')
+		pcPrice = 'big_price';
+	console.log(pcType + " " + pcPrice);
 }
 
 function sendToAi(event) {
@@ -127,8 +143,11 @@ function sendToAi(event) {
 	let apiAi = apiAiApp.textRequest(text, option);
 	apiAi.on('response', (response) => {
 		console.log(response);
-		if (response.result.action === 'input.welcome') {
+		let action = response.result.action;
+		if (action === 'input.welcome') {
 			getName(event);
+		} else if (action === 'gaming_pc' || action === 'office_pc' || action === 'internet_pc') {
+			findPc(response, event);
 		} else {
 			let aiText = response.result.fulfillment.speech;
 			sendTextMessage(sender_id, aiText);
