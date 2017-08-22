@@ -5,7 +5,7 @@
 // Login   <cedric.cescutti@epitech.eu>
 // 
 // Started on  Sat Aug 12 11:27:42 2017 Kraken
-// Last update Tue Aug 22 15:57:39 2017 Kraken
+// Last update Tue Aug 22 16:10:21 2017 Kraken
 //
 
 var express = require('express');
@@ -36,10 +36,8 @@ app.get('/', (request, response) => {
 app.get('/webhook', (request, response) => {
 	if (request.query['hub.verify_token'] === facebook_token) {
 		response.send(req.query['hub.challenge']);
-		console.log("facebook connection done");
 	}
 	response.send('Error, wrong token');
-	console.log("facebook connection failed");
 });
 
 // server message
@@ -55,8 +53,9 @@ app.post('/webhook/', (request, response) => {
 		event = request.body.entry[0].messaging[i];
 		sender = event.sender.id;
 		if (event.message && event.message.text) {
-			console.log("message reçu ->" + event.message.text);
-			sendToAi(event);
+			console.log("message reçu -> " + event.message.text);
+			//sendToAi(event);
+			sendTextMessage(event.sender.id, "test");
 		}
 	}
 	response.sendStatus(200);
@@ -91,13 +90,13 @@ function sendToAi(event) {
 	let sender_id = event.sender.id;
 	let text = event.message.text;
 	let option = {
-		sessionId: 'moumoute_bot'
+		sessionId: 'tabby_cat'
 	};
 
 	let apiAi = apiAiApp.textRequest(text, option);
-
 	apiAi.on('response', (response) => {
 		let aiText = response.result.fulfillment.speech;
+		console.log("message responce -> " + aiText);
 		sendTextMessage(sender_id, aiText);
 	});
 	apiAi.on('error', (error) => {
