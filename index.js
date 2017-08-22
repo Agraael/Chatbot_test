@@ -5,7 +5,7 @@
 // Login   <cedric.cescutti@epitech.eu>
 // 
 // Started on  Sat Aug 12 11:27:42 2017 Kraken
-// Last update Tue Aug 22 15:50:26 2017 Kraken
+// Last update Tue Aug 22 15:57:39 2017 Kraken
 //
 
 var express = require('express');
@@ -37,10 +37,9 @@ app.get('/webhook', (request, response) => {
 	if (request.query['hub.verify_token'] === facebook_token) {
 		response.send(req.query['hub.challenge']);
 		console.log("facebook connection done");
-	} else {
-		response.send('Error, wrong token');
-		console.log("facebook connection failed");
 	}
+	response.send('Error, wrong token');
+	console.log("facebook connection failed");
 });
 
 // server message
