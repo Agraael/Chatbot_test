@@ -5,7 +5,7 @@
 // Login   <cedric.cescutti@epitech.eu>
 // 
 // Started on  Sat Aug 12 11:27:42 2017 Kraken
-// Last update Tue Aug 22 19:35:00 2017 Kraken
+// Last update Tue Aug 22 21:07:02 2017 Kraken
 //
 
 var express = require('express');
@@ -106,7 +106,7 @@ function getName(event) {
 
 	}, (error, response, body) => {
 		if (error) {
-			console.log("error getting username")
+			console.log("error getting username");
 		} else {
 			var bodyObj = JSON.parse(body);
 			firsdtName = bodyObj.first_name;
