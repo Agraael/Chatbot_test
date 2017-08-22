@@ -5,7 +5,7 @@
 // Login   <cedric.cescutti@epitech.eu>
 // 
 // Started on  Sat Aug 12 11:27:42 2017 Kraken
-// Last update Tue Aug 22 16:10:21 2017 Kraken
+// Last update Tue Aug 22 16:15:19 2017 Kraken
 //
 
 var express = require('express');
@@ -62,6 +62,7 @@ app.post('/webhook/', (request, response) => {
 });
 
 function sendTextMessage(sender_id, text) {
+	console.log("message responce -> " + text);
 	messageData = {
 		text: text
 	};
@@ -96,7 +97,6 @@ function sendToAi(event) {
 	let apiAi = apiAiApp.textRequest(text, option);
 	apiAi.on('response', (response) => {
 		let aiText = response.result.fulfillment.speech;
-		console.log("message responce -> " + aiText);
 		sendTextMessage(sender_id, aiText);
 	});
 	apiAi.on('error', (error) => {
