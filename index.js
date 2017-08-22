@@ -5,7 +5,7 @@
 // Login   <cedric.cescutti@epitech.eu>
 // 
 // Started on  Sat Aug 12 11:27:42 2017 Kraken
-// Last update Tue Aug 22 15:26:37 2017 Kraken
+// Last update Tue Aug 22 15:33:39 2017 Kraken
 //
 
 var express = require('express');
@@ -36,6 +36,7 @@ app.get('/', (request, response) => {
 app.get('/webhook', (request, response) => {
 	if (request.query['hub.verify_token'] === facebook_token) {
 		response.send(req.query['hub.challenge']);
+		console.log("facebook connection done");
 	}
 	response.send('Error, wrong token');
 });
@@ -48,7 +49,8 @@ app.listen(app.get('port'), () => {
 // catch messenger responses -> send it to Api.ai
 app.post('/webhook/', (request, response) => {
 	messaging_events = request.body.entry[0].messaging;
-	for (var i = 0; i < messaging_events.length; i++) {
+
+	for (i = 0; i < messaging_events.length; i++) {
 		event = request.body.entry[0].messaging_events[i];
 		sender = event.sender.id;
 		if (event.message && event.message.text) {
