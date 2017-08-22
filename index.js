@@ -5,7 +5,7 @@
 // Login   <cedric.cescutti@epitech.eu>
 // 
 // Started on  Sat Aug 12 11:27:42 2017 Kraken
-// Last update Tue Aug 22 15:23:12 2017 Kraken
+// Last update Tue Aug 22 15:26:37 2017 Kraken
 //
 
 var express = require('express');
@@ -19,6 +19,7 @@ var heroku_token = "EAAbaupnhaZCwBAIgobay0MpBHY69qZAlmxd5JsFbCHQmX6gBHQKgX40287o
 var app = express();
 var apiAiApp = require('apiai')(apiAi_token);
 
+console.log("server start");
 app.set('port', (process.env.PORT || 5000));
 
 app.use(bodyParser.urlencoded({
