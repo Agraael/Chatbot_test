@@ -5,7 +5,7 @@
 // Login   <cedric.cescutti@epitech.eu>
 // 
 // Started on  Sat Aug 12 11:27:42 2017 Kraken
-// Last update Tue Aug 22 16:39:34 2017 Kraken
+// Last update Tue Aug 22 16:53:05 2017 Kraken
 //
 
 var express = require('express');
@@ -35,10 +35,11 @@ app.get('/', (request, response) => {
 
 // Facebook verification
 app.get('/webhook', (request, response) => {
-	if (request.query['hub.verify_token'] === facebook_token) {
+	if (request.query['hub.verify_token'] === process.env.VERIFICATION_TOKEN) {
 		response.send(req.query['hub.challenge']);
+	} else {
+		response.send('Error, wrong token');
 	}
-	response.send('Error, wrong token');
 });
 
 // server message
