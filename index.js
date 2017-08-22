@@ -5,7 +5,7 @@
 // Login   <cedric.cescutti@epitech.eu>
 // 
 // Started on  Sat Aug 12 11:27:42 2017 Kraken
-// Last update Tue Aug 22 19:25:34 2017 Kraken
+// Last update Tue Aug 22 19:35:00 2017 Kraken
 //
 
 var express = require('express');
@@ -94,6 +94,28 @@ function sendTextMessage(sender_id, text) {
 	});
 }
 
+function getName(event) {
+	let sender_id = event.sender.id;
+	request({
+		url: "https://graph.facebook.com/v2.6/" + sender,
+		qs: {
+			access_token: token,
+			fields: "first_name"
+		},
+		method: "GET",
+
+	}, (error, response, body) => {
+		if (error) {
+			console.log("error getting username")
+		} else {
+			var bodyObj = JSON.parse(body);
+			firsdtName = bodyObj.first_name;
+			lastName = bodyObj.last_name;
+			sendTextMessage(sender_id, "Bonjour," + firstName + " " + lastName + ", je suis un bot créé par Jules et je vais vous trouver l\'ordinateur idéal.");
+		}
+	});
+}
+
 function sendToAi(event) {
 	let sender_id = event.sender.id;
 	let text = event.message.text;
@@ -105,7 +127,7 @@ function sendToAi(event) {
 	apiAi.on('response', (response) => {
 		console.log(response);
 		if (response.result.action === 'input.welcome') {
-			sendTextMessage(sender_id, 'yoo');
+			getName(event);
 		} else {
 			let aiText = response.result.fulfillment.speech;
 			sendTextMessage(sender_id, aiText);
