@@ -5,7 +5,7 @@
 // Login   <cedric.cescutti@epitech.eu>
 // 
 // Started on  Sat Aug 12 11:27:42 2017 Kraken
-// Last update Tue Aug 22 21:18:28 2017 Kraken
+// Last update Tue Aug 22 21:30:34 2017 Kraken
 //
 
 var express = require('express');
@@ -99,7 +99,7 @@ function getName(event) {
 	request({
 		url: "https://graph.facebook.com/v2.6/" + sender,
 		qs: {
-			access_token: token,
+			access_token: heroku_token,
 			fields: 'first_name,last_name,'
 		},
 		method: "GET",
