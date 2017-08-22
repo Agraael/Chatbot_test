@@ -5,7 +5,7 @@
 // Login   <cedric.cescutti@epitech.eu>
 // 
 // Started on  Sat Aug 12 11:27:42 2017 Kraken
-// Last update Tue Aug 22 21:36:38 2017 Kraken
+// Last update Tue Aug 22 21:39:04 2017 Kraken
 //
 
 var express = require('express');
@@ -109,7 +109,7 @@ function getName(event) {
 			console.log("error getting username");
 		} else {
 			var bodyObj = JSON.parse(body);
-			firsdtName = bodyObj.first_name;
+			firstName = bodyObj.first_name;
 			lastName = bodyObj.last_name;
 			sendTextMessage(sender_id, "Bonjour," + firstName + " " + lastName + ", je suis un bot créé par Jules et je vais vous trouver l\'ordinateur idéal.");
 		}
