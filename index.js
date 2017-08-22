@@ -5,7 +5,7 @@
 // Login   <cedric.cescutti@epitech.eu>
 // 
 // Started on  Sat Aug 12 11:27:42 2017 Kraken
-// Last update Tue Aug 22 15:36:13 2017 Kraken
+// Last update Tue Aug 22 15:42:40 2017 Kraken
 //
 
 var express = require('express');
@@ -96,7 +96,7 @@ function sendToAi(event) {
 	let apiAi = apiAiApp.textRequest(text, option);
 
 	apiAi.on('response', (response) => {
-		let aiText = response.result.fulfill.speech;
+		let aiText = response.result.fulfillment.speech;
 		sendTextMessage(sender_id, aiText);
 	});
 	apiAi.on('error', (error) => {
