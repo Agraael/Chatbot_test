@@ -1,154 +1,102 @@
-var express = require('express')
-var bodyParser = require('body-parser')
-var request = require('request')
-var app = express()
-const apiaiApp = require('apiai')("e6cf31a0e6a3440c81b4e7bda0d67442");
+//
+// index.js for chatbot_test in /home/kraken/Knowledge/Programming/Node.Js/chat_bot/test_bot_messenger
+// 
+// Made by Kraken
+// Login   <cedric.cescutti@epitech.eu>
+// 
+// Started on  Sat Aug 12 11:27:42 2017 Kraken
+// Last update Tue Aug 15 20:30:26 2017 Kraken
+//
 
+var express = require('express');
+var bodyParser = require('body-parser');
+var request = require('request');
 
+var apiAi_token = "e6cf31a0e6a3440c81b4e7bda0d67442";
+var facebook_token = "my_voice_is_Pmy_password_verify_me";
+var heroku_token = "EAAbaupnhaZCwBAIgobay0MpBHY69qZAlmxd5JsFbCHQmX6gBHQKgX40287ov6stg6E0vLln7WsiZC3wlPHwZCYJgZCTtOcHCNaHLMQTQmhpOcpaMXQLSTZAZCOeUykWJaIqtfLIXtbt0phVoFel2T4Tj8i4lhdLliJQWWYHkNxEzwZDZD";
 
-app.set('port', (process.env.PORT || 5000))
+var app = express();
+var apiAiApp = require('apiai')(apiAi_token);
 
-// Process application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({extended: false}))
+app.set('port', (process.env.PORT || 5000));
 
-// Process application/json
-app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({
+	extended: false
+}));
 
-// Index route
-app.get('/', function (req, res){
-    res.send('Hello world, I am a chat bot')
+app.use(bodyParser.json());
+
+app.get('/', (request, response) => {
+	response.send('Hello, I am a chat bot');
 });
 
-// for Facebook verification
-app.get('/webhook/', function (req, res){
-    if (req.query['hub.verify_token'] === 'my_voice_is_my_password_verify_me'){
-	res.send(req.query['hub.challenge'])
-    }
-    res.send('Error, wrong token')
+// Facebook verification
+app.get('/webhook', (request, response) => {
+	if (request.query['hub.verify_token'] === facebook_token) {
+		response.send(req.query['hub.challenge']);
+	}
+	response.send('Error, wrong token');
 });
 
-// Spin up the server
-app.listen(app.get('port'), function(){
-    console.log('running on port', app.get('port'))
+// server message
+app.listen(app.get('port'), () => {
+	console.log('running on port', app.get('port'));
 });
 
-app.post('/webhook/', function (req, res) {
-    messaging_events = req.body.entry[0].messaging
+// catch messenger responses -> send it to Api.ai
+app.post('/webhook/', (request, response) => {
+	messaging_events = request.body.entry[0].messaging;
+	for (var i = 0; i < messaging_events.length; i++) {
+		event = request.body.entry[0].messaging_events[i];
+		sender = event.sender.id;
+		if (event.message && event.message.text) {
+			sendToAi(event);
+		}
+	}
+	response.sendStatus(200);
+});
 
-    for (i = 0; i < messaging_events.length; i++)
-    {
-	event = req.body.entry[0].messaging[i]
-	sender = event.sender.id
-	if (event.message && event.message.text) {
-	    sendToAi(event);
-	    //     text = event.message.text
-	    //     if (text === 'Generic') {
-	    // 	sendGenericMessage(sender)
-	    // 	continue
-	    //     }
-	    //     sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200))
-	    // }
-	    // if (event.postback) {
-	    //     text = JSON.stringify(event.postback)
-	    //     sendTextMessage(sender, "Postback received: "+text.substring(0, 200), token)
-	    //     continue
-	}
-    }
-    res.sendStatus(200)
-})
-
-var heroku_token = "EAAbaupnhaZCwBAIgobay0MpBHY69qZAlmxd5JsFbCHQmX6gBHQKgX40287ov6stg6E0vLln7WsiZC3wlPHwZCYJgZCTtOcHCNaHLMQTQmhpOcpaMXQLSTZAZCOeUykWJaIqtfLIXtbt0phVoFel2T4Tj8i4lhdLliJQWWYHkNxEzwZDZD"
-
-function sendTextMessage(sender, text) {
-    messageData = {
-	text:text
-    }
-    request({
-	url: 'https://graph.facebook.com/v2.6/me/messages',
-	qs: {access_token:heroku_token},
-	method: 'POST',
-	json: {
-	    recipient: {id:sender},
-	    message: messageData,
-	}
-    }, function(error, response, body) {
-	if (error) {
-	    console.log('Error sending messages: ', error)
-	} else if (response.body.error) {
-	    console.log('Error: ', response.body.error)
-	}
-    })
-}
-
-function sendGenericMessage(sender) {
-    messageData = {
-	"attachment": {
-	    "type": "template",
-	    "payload": {
-		"template_type": "generic",
-		"elements": [{
-		    "title": "First card",
-		    "subtitle": "Element #1 of an hscroll",
-		    "image_url": "http://messengerdemo.parseapp.com/img/rift.png",
-		    "buttons": [{
-			"type": "web_url",
-			"url": "https://www.messenger.com",
-			"title": "web url"
-		    }, {
-			"type": "postback",
-			"title": "Postback",
-			"payload": "Payload for first element in a generic bubble",
-		    }],
-		}, {
-		    "title": "Second card",
-		    "subtitle": "Element #2 of an hscroll",
-		    "image_url": "http://messengerdemo.parseapp.com/img/gearvr.png",
-		    "buttons": [{
-			"type": "postback",
-			"title": "Postback",
-			"payload": "Payload for second element in a generic bubble",
-		    }],
-		}]
-	    }
-	}
-    }
-    request({
-	url: 'https://graph.facebook.com/v2.6/me/messages',
-	qs: {access_token:heroku_token},
-	method: 'POST',
-	json: {
-	    recipient: {id:sender},
-	    message: messageData,
-	}
-    }, function(error, response, body) {
-	if (error) {
-	    console.log('Error sending messages: ', error)
-	} else if (response.body.error) {
-	    console.log('Error: ', response.body.error)
-	}
-    })
+function sendTextMessage(sender_id, text) {
+	messageData = {
+		text: text
+	};
+	request({
+		url: 'https://graph.facebook.com/v2.6/me/messages',
+		qs: {
+			access_token: heroku_token
+		},
+		method: 'POST',
+		json: {
+			recipient: {
+				id: sender_id
+			},
+			message: messageData,
+		}
+	}, (error, response, body) => {
+		if (error) {
+			console.log('Error sending messages: ', error);
+		} else if (response.body.error) {
+			console.log('Error: ', response.body.error);
+		}
+	});
 }
 
 function sendToAi(event) {
-    let sender = event.sender.id;
-    let text = event.message.text;
+	let sender_id = event.sender.id;
+	let text = event.message.text;
+	let option = {
+		sessionId: 'moumoute_bot'
+	};
 
-    let apiai = apiaiApp.textRequest(text, {
-	sessionId: 'tabby_cat' // use any arbitrary id
+	let apiAi = apiAiApp.textRequest(text, option);
 
-    });
-
-    apiai.on('response', (response) => {
-	// Got a response from api.ai. Let's POST to Facebook Messenger
-	let aiText = response.result.fulfillment.speech;
-	sendTextMessage(sender, aiText);
-    });
-
-    apiai.on('error', (error) => {
-	console.log(error);
-
-    });
-
-    apiai.end();
-
+	apiAi.on('response', (response) => {
+		let aiText = response.result.fulfill.speech;
+		sendTextMessage(sender_id, aiText);
+	});
+	apiAi.on('error', (error) => {
+		console.log(error);
+	});
+	apiAi.end();
 }
