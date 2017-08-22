@@ -5,7 +5,7 @@
 // Login   <cedric.cescutti@epitech.eu>
 // 
 // Started on  Sat Aug 12 11:27:42 2017 Kraken
-// Last update Tue Aug 22 16:53:35 2017 Kraken
+// Last update Tue Aug 22 17:01:43 2017 Kraken
 //
 
 var express = require('express');
@@ -13,8 +13,8 @@ var bodyParser = require('body-parser');
 var request = require('request');
 
 var apiAi_token = "e6cf31a0e6a3440c81b4e7bda0d67442";
-var facebook_token = '70df898dc6ce474bd8e389681c9a6a04';
-var heroku_token = "EAAbaupnhaZCwBAIgobay0MpBHY69qZAlmxd5JsFbCHQmX6gBHQKgX40287ov6stg6E0vLln7WsiZC3wlPHwZCYJgZCTtOcHCNaHLMQTQmhpOcpaMXQLSTZAZCOeUykWJaIqtfLIXtbt0phVoFel2T4Tj8i4lhdLliJQWWYHkNxEzwZDZD";
+var facebook_token = 'this_is_my_token';
+var heroku_token = "70df898dc6ce474bd8e389681c9a6a04";
 
 
 var app = express();
@@ -35,7 +35,7 @@ app.get('/', (request, response) => {
 
 // Facebook verification
 app.get('/webhook', (request, response) => {
-	if (request.query['hub.verify_token'] === process.env.VERIFICATION_TOKEN) {
+	if (request.query['hub.verify_token'] === facebook_token) {
 		console.log("Verified webhook");
 		res.status(200).send(req.query["hub.challenge"]);
 	} else {
