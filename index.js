@@ -5,7 +5,7 @@
 // Login   <cedric.cescutti@epitech.eu>
 // 
 // Started on  Sat Aug 12 11:27:42 2017 Kraken
-// Last update Tue Aug 22 21:30:34 2017 Kraken
+// Last update Tue Aug 22 21:36:38 2017 Kraken
 //
 
 var express = require('express');
@@ -97,7 +97,7 @@ function sendTextMessage(sender_id, text) {
 function getName(event) {
 	let sender_id = event.sender.id;
 	request({
-		url: "https://graph.facebook.com/v2.6/" + sender,
+		url: "https://graph.facebook.com/v2.6/" + sender_id,
 		qs: {
 			access_token: heroku_token,
 			fields: 'first_name,last_name,'
