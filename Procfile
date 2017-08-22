@@ -1,1 +1,1 @@
-web: node old_index.js
+web: node index.js
