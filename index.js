@@ -5,7 +5,7 @@
 // Login   <cedric.cescutti@epitech.eu>
 // 
 // Started on  Sat Aug 12 11:27:42 2017 Kraken
-// Last update Tue Aug 22 15:33:39 2017 Kraken
+// Last update Tue Aug 22 15:36:13 2017 Kraken
 //
 
 var express = require('express');
@@ -51,7 +51,7 @@ app.post('/webhook/', (request, response) => {
 	messaging_events = request.body.entry[0].messaging;
 
 	for (i = 0; i < messaging_events.length; i++) {
-		event = request.body.entry[0].messaging_events[i];
+		event = request.body.entry[0].messaging[i];
 		sender = event.sender.id;
 		if (event.message && event.message.text) {
 			console.log("message reçu ->" + event.message.text);
