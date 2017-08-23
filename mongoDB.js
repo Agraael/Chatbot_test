@@ -42,8 +42,14 @@ MongoClient.connect(uri, function(err, db) {
 			price: 1498,
 			tags: ["office", "big_price"]
 		}
+
 	]).then(function(result) {
 		// process result
+	});
+	db.collection('inventory').find({
+		tags: ['office', 'low_price']
+	}).nextObject(function(err, item) {
+		console.log(item.link);
 	});
 	db.close();
 });

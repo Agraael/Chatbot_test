@@ -5,7 +5,7 @@
 // Login   <cedric.cescutti@epitech.eu>
 // 
 // Started on  Sat Aug 12 11:27:42 2017 Kraken
-// Last update Wed Aug 23 02:02:26 2017 Kraken
+// Last update Wed Aug 23 02:17:21 2017 Kraken
 //
 
 var express = require('express');
@@ -139,10 +139,12 @@ function findPc(response, event) {
 	if (response.result.parameters.big_price != '')
 		pcPrice = 'big_price';
 	console.log(pcType + " " + pcPrice);
+
 	var cursor = dataBase.collection('inventory').find({
-		tags: [pcPrice, pcType]
+		tags: ['office', 'low_price']
+	}).nextObject(function(err, item) {
+		sendTextMessage(event.sender.id, "Ok, j'ai l'ordinateur qu'il vous faut :" + item.link);
 	});
-	console.log(cursor);
 }
 
 function sendToAi(event) {
