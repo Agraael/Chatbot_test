@@ -5,12 +5,13 @@
 // Login   <cedric.cescutti@epitech.eu>
 // 
 // Started on  Sat Aug 12 11:27:42 2017 Kraken
-// Last update Wed Aug 23 01:54:34 2017 Kraken
+// Last update Wed Aug 23 02:02:26 2017 Kraken
 //
 
 var express = require('express');
 var bodyParser = require('body-parser');
 var request = require('request');
+var dataBase;
 
 var apiAi_token = "30dbfe4cfa4242e69f52ce4efacdf6f6";
 var facebook_token = 'this_is_my_token';
@@ -22,6 +23,13 @@ var apiAiApp = require('apiai')(apiAi_token);
 
 console.log("server start");
 app.set('port', (process.env.PORT || 5000));
+
+var MongoClient = require('mongodb').MongoClient;
+
+var uri = "mongodb://kraken:<ns9r^fm@cluster0-shard-00-00-iw9xa.mongodb.net:27017,cluster0-shard-00-01-iw9xa.mongodb.net:27017,cluster0-shard-00-02-iw9xa.mongodb.net:27017/Pc_Db?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin";
+MongoClient.connect(uri, function(err, db) {
+	dataBase = db;
+});
 
 app.use(bodyParser.urlencoded({
 	extended: false
@@ -131,6 +139,10 @@ function findPc(response, event) {
 	if (response.result.parameters.big_price != '')
 		pcPrice = 'big_price';
 	console.log(pcType + " " + pcPrice);
+	var cursor = dataBase.collection('inventory').find({
+		tags: [pcPrice, pcType]
+	});
+	console.log(cursor);
 }
 
 function sendToAi(event) {
