@@ -47,7 +47,9 @@ MongoClient.connect(uri, function(err, db) {
 		// process result
 	});
 	db.collection('inventory').find({
-		tags: ['office', 'low_price']
+		tags: {
+			$all: ['office', 'low_price']
+		}
 	}).nextObject(function(err, item) {
 		console.log(item.link);
 	});
