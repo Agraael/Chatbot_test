@@ -4,8 +4,8 @@
 // Made by Kraken
 // Login   <cedric.cescutti@epitech.eu>
 // 
-// Started on  Sat Aug 12 11:27:42 2017 Kraken
-// Last update Wed Aug 23 02:20:48 2017 Kraken
+// Started on  Mon Aug 21 11:27:42 2017 Kraken
+// Last update Thu Aug 24 19:38:15 2017 Kraken
 //
 
 var express = require('express');
@@ -143,7 +143,7 @@ function findPc(response, event) {
 	var cursor = dataBase.collection('inventory').find({
 		tags: [pcType, pcPrice]
 	}).nextObject(function(err, item) {
-		sendTextMessage(event.sender.id, "Ok, j'ai l'ordinateur qu'il vous faut :" + item.link);
+		sendTextMessage(event.sender.id, "Ok, j'ai l'ordinateur qu'il vous faut : " + item.link);
 	});
 }
 
